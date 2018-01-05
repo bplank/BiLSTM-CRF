@@ -18,7 +18,7 @@ c2i: Dict mapping characters to indices
  
 import codecs
 import argparse
-import cPickle
+import pickle
 import collections
 import morfessor
 from utils import split_tagstring
@@ -149,9 +149,9 @@ output["t2i"] = t2i
 output["c2i"] = c2i
 output["mt2i"] = mt2i
 
-with open(options.output, "w") as outfile:
-    cPickle.dump(output, outfile)
+with open(options.output, "wb") as outfile:
+    pickle.dump(output, outfile)
 
-with codecs.open(options.vocab_file, "w", "utf-8") as vocabfile:
-    for word in w2i.keys():
+with codecs.open(options.vocab_file, "wb", "utf-8") as vocabfile:
+    for word in list(w2i.keys()):
         vocabfile.write(word + "\n")

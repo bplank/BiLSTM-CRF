@@ -3,7 +3,7 @@ Created on Nov 30, 2016
 
 @author: Yuval Pinter
 '''
-from __future__ import division
+
 import unittest
 from evaluate_morphotags import Evaluator
 from utils import split_tagstring
@@ -19,7 +19,7 @@ class Test(unittest.TestCase):
         with open('simple_morpho_eval_test.txt', 'r') as sample_file:
             for l in sample_file.readlines():
                 if not l.startswith('#'):
-                    g, o = map(split_tagstring, l.split('\t'))
+                    g, o = list(map(split_tagstring, l.split('\t')))
                     eval1.add_instance(g, o)
                     eval2.add_instance(g, o)
                     eval3.add_instance(g, o)

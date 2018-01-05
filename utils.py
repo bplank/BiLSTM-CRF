@@ -1,4 +1,4 @@
-import cPickle
+import pickle
 import itertools
 import codecs
 import numpy as np
@@ -45,7 +45,7 @@ class ConfusionMatrix:
             self.cm = self.cm.astype('float') / self.cm.sum(axis=1)[:, np.newaxis]
 
         thresh = self.cm.max() / 2.
-        for i, j in itertools.product(range(self.cm.shape[0]), range(self.cm.shape[1])):
+        for i, j in itertools.product(list(range(self.cm.shape[0])), list(range(self.cm.shape[1]))):
             plt.text(j, i, self.cm[i, j],
                      horizontalalignment="center",
                      color="white" if self.cm[i, j] > thresh else "black")
@@ -71,9 +71,9 @@ def read_pretrained_embeddings(filename, w2i):
                 word = split[0]
                 vec = split[1:]
                 word_to_embed[word] = vec
-    embedding_dim = len(word_to_embed[word_to_embed.keys()[0]])
+    embedding_dim = len(word_to_embed[list(word_to_embed.keys())[0]])
     out = np.random.uniform(-0.8, 0.8, (len(w2i), embedding_dim))
-    for word, embed in word_to_embed.items():
+    for word, embed in list(word_to_embed.items()):
         embed_arr = np.array(embed)
         if np.linalg.norm(embed_arr) < 15.0 and word in w2i:
             # Theres a reason for this if condition.  Some tokens in ptb

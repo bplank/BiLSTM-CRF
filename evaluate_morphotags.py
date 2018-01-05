@@ -5,7 +5,7 @@ either by attribute alone (pooled over values) or by attribute-value combination
 
 @author: Yuval Pinter
 '''
-from __future__ import division
+
 from numpy import average
 
 def f1(corr, gold, obs):
@@ -45,13 +45,13 @@ class Evaluator(object):
                 self.exact_match = self.exact_match + 1
             return
             
-        for (k, v) in g.items():
+        for (k, v) in list(g.items()):
             key = self._key(k, v)
             if o.get(k, 'NOT A VALUE') == v:
                 self.correct[key] = self.correct.get(key, 0) + 1  # for macro-micro
             self.gold[key] = self.gold.get(key, 0) + 1  # mac-mic
             
-        for (k, v) in o.items():
+        for (k, v) in list(o.items()):
             key = self._key(k, v)
             self.observed[key] = self.observed.get(key, 0) + 1  # mac-mic
             
@@ -65,8 +65,8 @@ class Evaluator(object):
         return f1(sum(self.correct.values()), sum(self.gold.values()), sum(self.observed.values()))
     
     def mac_f1(self):
-        all_keys = set().union(self.gold.keys(), self.observed.keys())
-        return average(map(lambda k : f1(self.correct.get(k, 0), self.gold.get(k, 0), self.observed.get(k, 0)), all_keys))
+        all_keys = set().union(list(self.gold.keys()), list(self.observed.keys()))
+        return average([f1(self.correct.get(k, 0), self.gold.get(k, 0), self.observed.get(k, 0)) for k in all_keys])
     
     def acc(self):
         if self.instance_count <= 0:
